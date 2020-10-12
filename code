@@ -1,0 +1,199 @@
+#include<iostream>
+#include<stdlib.h>
+using namespace std;
+struct node{
+    int data;
+    struct node *prev;
+    struct node *next;
+}*head,*ptr,*temp;
+
+int main()
+{
+	int ch;
+	void insert_beg();
+	void insert_last();
+	void insert_pos();
+	void delete_beg();
+	void delete_last();
+	void delete_pos();
+	void display();
+	do
+	{
+	cout<<"\nChoose\n1.Insert\n2.Delete\n3.Display\n4.Exit\n";
+  	 cin>>ch;
+	switch(ch)
+        	{
+            case 1:	cout<<"Insertion Menu\n1.Insert at beginning\n2.Insert at end\n3.Insert at specified position\n4.Exit\n";
+            cin>>ch;
+	switch(ch)
+                    	{
+                        case 1: insert_beg();
+                                break;
+                        case 2: insert_last();
+                                break;
+                        case 3: insert_pos();
+                                break;
+		case 4: exit(0);
+                        default: cout<<"Wrong Choice!!";
+                    }
+                    break;
+ 	case 2:	cout<<"Deletion Menu\n1.Delete at beginning\n2.Delete at end\n3.Delete at specified position\n4.Exit\n";
+             cin>>ch; 
+             switch(ch)
+                    {
+                        case 1: delete_beg();
+                                break;
+                        case 2: delete_last();
+                                break;
+                        case 3: delete_pos();
+                                break;
+                        case 4: exit(0);
+                        default: cout<<"Wrong Choice!!";
+                    }
+                    break;
+            case 3:	display();
+                	break; 
+        }
+    }while(ch!=4);
+}					
+void insert_beg(){
+	int n;
+	ptr=(struct node*)malloc(sizeof(struct node));
+	cout<<"Enter data:";
+	cin>>n;
+	if(ptr==NULL)
+	cout<<"Overflow";
+	else if(head==NULL){
+		ptr->next=NULL;  
+       	ptr->prev=NULL;  
+       	ptr->data=n;  
+       	head=ptr;
+	}
+	else{
+		ptr->data=n;  
+       	ptr->prev=NULL;  
+       	ptr->next = head;  
+       	head->prev=ptr;  
+       	head=ptr;  
+	}
+}
+void insert_last(){
+    int n;
+    ptr=(struct node*)malloc(sizeof(struct node));
+	if(ptr==NULL)
+	cout<<"Overflow";
+	else{
+		cout<<"Enter data:";
+		cin>>n;
+		ptr->data=n;
+		if(head==NULL){
+			ptr->next=NULL;
+			ptr->prev=NULL;
+			head=ptr;
+		}
+		else{
+			temp=head;
+			while(temp->next!=NULL)
+				temp=temp->next;
+			temp->next=ptr;
+			ptr->prev=temp;
+			ptr->next=NULL;
+		}
+	}
+}
+void insert_pos(){
+   int n,pos;	
+   ptr=(struct node *)malloc(sizeof(struct node));
+   cout<<"Enter data:";  
+   cin>>n; 
+   if(ptr == NULL)    
+       cout<<"Overflow";  
+   else  
+   {  
+       temp=head;  
+       cout<<"Enter position to insert:";  
+       cin>>pos;
+       for(int i=0;i<pos-1;i++){  
+           temp = temp->next;  
+           if(temp == NULL){  
+               cout<<"There are less elements";  
+               return;  
+           }  
+       }  
+       ptr->data=n;  
+       ptr->next = temp->next;  
+       ptr -> prev = temp;  
+       temp->next = ptr;  
+       temp->next->prev=ptr;    
+   }
+}
+void delete_beg(){
+	if(head==NULL)
+	cout<<"Underflow";
+	else if(head->next==NULL){
+		head=NULL;
+		cout<<"Deleted element is "<<head->data;
+        		free(head);
+	}
+	else{
+		ptr=head;
+		head=head->next;
+		head->prev=NULL;
+		cout<<"Deleted element is "<<ptr->data;
+        		free(ptr);
+	}
+}
+void delete_last(){
+	if(head==NULL)
+		cout<<"Underflow";
+	else if(head->next==NULL){
+		head=NULL;
+		cout<<"Deleted element is "<<head->data;
+        		free(head);
+	}
+	else{
+		ptr=head;
+		temp=head;
+		ptr=ptr->next;
+		while(ptr->next!=NULL){
+			ptr=ptr->next;
+			temp=temp->next;
+		}
+	   	temp->next=NULL;
+		cout<<"Deleted element is "<<ptr->data;
+		free(ptr);
+	}
+}
+void delete_pos(){
+	int pos;
+	cout<<"Enter position to delete:";
+    	cin>>pos;
+	ptr=head;
+	for(int i=0;i<pos-1;i++){
+		ptr=ptr->next;
+    	}
+	if(ptr->next==NULL)
+		cout<<"Can't delete'";
+	else if(ptr->next->next==NULL){
+		ptr->next=NULL;
+	}
+	else{
+		temp=ptr->next;
+		ptr->next=temp->next;
+		temp->next->prev=ptr;
+		cout<<"Deleted element is "<<temp->data;
+        		free(temp);
+	}
+}
+void display(){
+	ptr=head;
+	cout<<"The Doubly linked list is:";
+	while(ptr!=NULL){
+		cout<<ptr->data<<" ";
+		ptr=ptr->next;
+	}
+}
+
+
+
+
